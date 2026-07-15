@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"allow-dev","namespace":"prod"},"spec":{"ingress":[{"from":[{"namespaceSelector":{"matchLabels":{"ns":"dev"}}}]}],"podSelector":{"matchLabels":{"app":"backend"}}}}
+  creationTimestamp: "2026-07-09T11:20:03Z"
+  generation: 1
+  name: allow-dev
+  namespace: prod
+  resourceVersion: "581721"
+  uid: cf0c212a-b620-4841-bb49-1aff3b5e31ad
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          ns: dev
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+  - Ingress

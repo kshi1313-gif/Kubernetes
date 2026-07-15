@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: deploy-web
+  name: deploy-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploy-web
+  template:
+    metadata:
+      labels:
+        app: deploy-web
+    spec:
+      containers:
+      - image: kshi1313/hpa-example.com
+        name: web
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 200m 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-web
+spec:
+  type: ClusterIP
+  selector:
+    app: web
+  ports:
+    - port: 80
+      targetPort: 80

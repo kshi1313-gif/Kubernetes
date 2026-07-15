@@ -1,0 +1,58 @@
+---
+# kubectl create deploy mongodb-express \
+# --image=mongo-express:1.0.2-18 \
+# --port=8081 \
+# --replicas=1
+# kubectl label deploy mongodb-express app=mongodb-express
+# kubectl scale deploy mongodb-express --replicas=2
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mongo-express
+  name: mongodb-express
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-express
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: mongo-express
+    spec:
+      containers:
+      - image: mongo-express:1.0.2-18
+        name: mongo-express
+        ports:
+        - containerPort: 8081
+        # value
+        env:
+          - name: ME_CONFIG_MONGODB_URL
+            valueFrom:
+              configMapKeyRef:
+                name: mongodb-configmap
+                key: database_url
+          - name: ME_CONFIG_BASICAUTH_ENABLED
+            value: "true"
+          - name:  ME_CONFIG_BASICAUTH_USERNAME
+            value: admin
+          - name: ME_CONFIG_BASICAUTH_PASSWORD
+            value: password
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-express-service
+spec:
+  selector:
+    app: mongo-express
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 8081
+    nodePort: 30000
+

@@ -1,0 +1,22 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: metallb-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    # 아래 IP 주소 풀을 자신이 주고 싶은 대역으로 변경한다.
+    # 조건) L2 모드인 경우
+    # * 클러스터 노드와 같은 L2 네트워크여야 한다.
+    # * DHCP에서 사용하지 않는 여역이어야 한다.
+    # * 다른 장비가 사용하지 않는 IP여야 한다.
+    # * Gateway와 겹치면 안된다.
+    - 192.168.10.20-192.168.10.30
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: metallb-l2
+  namespace: metallb-system
+
